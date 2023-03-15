@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { PhonebookForm } from './PhonebookForm';
 import { ContactList } from './ContactList';
@@ -13,8 +13,15 @@ const initialContacts = [
 ];
 
 export function App() {
-  const [contacts, setContacts] = useState(initialContacts);
+  const [contacts, setContacts] = useState(
+    JSON.parse(window.localStorage.getItem('contacts')) ?? initialContacts
+  );
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    console.log('App useEffect');
+    window.localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
   const addContact = ({ name, number }) => {
     const newContact = {
